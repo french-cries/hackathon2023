@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Update Member Profile for staff{% endblock %}
+{% block content %}
+{% from "includes/formHelper.html" import render_field %}
+
+<h1 class="display-4">Update Member Profile</h1>
+
+
+
+
+    <div class="border rounded" style="width:60%">
+
+<h1>Profile</h1>
+        <form method="POST" action="">
+
+    <hr>
+    <ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#Pesonal_Information">
+            Pesonal Information
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#Address">
+            Address
+        </a>
+    </li>
+</ul>
+
+    <div class="tab-content">
+    <div class="tab-pane container active" id="Pesonal_Information">
+
+        <br>
+        <h2>Personal information</h2>
+
+    <div class="container text-center">
+  <div class="row align-items-start">
+      <div class="container text-center">
+  <div class="row align-items-start">
+    <div class="col">
+      <div class="form-group">
+         {{ render_field(form.first_name, class="form-control") }}
+    </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+         {{ render_field(form.last_name, class="form-control") }}
+    </div>
+    </div>
+  </div>
+</div>
+
+    <div class="form-group">
+         {{ render_field(form.email, class="form-control") }}
+    </div>
+    <div class="form-group">
+         {{ render_field(form.dob, class="form-control") }}
+    </div>
+    <div class="form-group">
+         {{ render_field(form.phonenumber, class="form-control") }}
+    </div>
+    <div class="form-group">
+         {{ render_field(form.gender, class="form-control") }}
+    </div>
+
+  </div>
+  </div>
+</div>
+<div class="tab-pane container fade" id="Address">
+        <br>
+        <h2>Adress</h2>
+        <br>
+           <div class="form-group">
+ {{ render_field(form.country,class="form-check", style="liststyle-type:none") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.company, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.house, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.postal_code, class="form-control") }}
+ </div>
+    </div>
+    </div>
+<button type="submit">Update</button>
+            </form>
+    </div>
+
+{% endblock %}

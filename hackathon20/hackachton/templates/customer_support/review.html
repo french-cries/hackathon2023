@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "includes/formHelper.html" import render_field %}
+<style>
+    .inner-container{
+    margin:20px;
+    }
+</style>
+     <h1 class="text-center" style="margin-top:50px">Rate this page</h1><br>
+
+<!--</table>-->
+<div class="container2">
+    <div class="mb-3 inner-container">
+        <form action="/customer_support/submit" method="post">
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required><br>
+        <label for="rating" class="form-label" >Rating:</label><br>
+        <div class="star-rating ">
+            <input type="radio" id="star1" name="rating" value="1" class="mb-2" required><i class="mb-2">1</i>
+            <input type="radio" id="star2" name="rating" value="2" class="mb-2"><i class="mb-2">2</i>
+            <input type="radio" id="star3" name="rating" value="3" class="mb-2"><i class="mb-2">3</i>
+            <input type="radio" id="star4" name="rating" value="4" class="mb-2"><i class="mb-2">4</i>
+            <input type="radio" id="star5" name="rating" value="5" class="mb-2"><i class="mb-2">5</i>
+
+        </div>
+
+
+        <br>
+        <label for="review" class="form-label">Review:</label>
+        <textarea id="review" name="review" rows="4" class="form-control" required></textarea><br>
+        <input type="submit" value="Submit Review">
+    </form>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+

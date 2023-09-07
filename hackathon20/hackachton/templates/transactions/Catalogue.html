@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+ <style>
+ .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-top: 70px;
+    margin-bottom: 50px;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.card {
+    flex: 0 0 calc(33.33% - 20px); /* Adjust the width as needed */
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.card img {
+    max-width: 100%;
+
+    border-radius: 8px;
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin-bottom: 0;
+}
+
+.card form {
+    margin-top: 10px;
+}
+
+.card input[type="submit"] {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.card input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+
+
+   .sidebar-cart {
+    width: 300px;
+    background-color: #f4f4f4;
+    position: fixed;
+    right: -300px;
+    top: 0;
+    height: 100%;
+    padding: 20px;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-icon {
+    font-size: 24px;
+    cursor: pointer;
+
+.sidebar-cart li {
+text-align: left
+]
+
+   }
+
+    </style>
+
+
+    <div class="sidebar-cart" id="sidebar-cart">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <span class="close-icon" id="close-icon">&times;</span>
+        </div>
+    <ul>
+        {% for product_name, item in cart_items.items() %}
+
+                <strong>Product Name:</strong> {{ item.name }} <br>
+<!--                <strong>Color:</strong> {{ item["color"] }} <br>-->
+                <strong>Quantity:</strong> {{ item.quantity }} <br>
+                <strong>Price:</strong> ${{ '%.2f' % item.price }} <br>
+                <strong>Subtotal:</strong> ${{ '%.2f' % item.subtotal }} <br>
+
+
+        {% endfor %}
+    </ul>
+        <div class="total">
+            <p>Total Price: ${{ '%.2f' % total_amount }}</p>
+        </div>
+    <div class="cart-actions">
+        <a class="close-cart-btn" id="close-cart-btn" href="/transactions/cart">Close Cart &amp; Continue Shopping</a>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="cards-container">
+        <div class="card">
+            <img src="{{  url_for('static', filename='image2/P1-White.webp')}} " alt="Product 1">
+            <h2>Shiftwalk Air Max 90</h2>
+            <p>Price: $10.99</p>
+            <form action="/transactions/Product" method="get">
+                <input type="submit" value="View Details">
+            </form>
+        </div>
+
+        <div class="card">
+            <img src="{{  url_for('static', filename='image2/P2-Blue.jpeg')}}" alt="Product 2">
+            <h2>Shiftwalk SB Dunk</h2>
+            <p>Price: $24.99</p>
+            <form action="/transactions/Product2" method="get">
+                <input type="submit" value="View Details">
+            </form>
+        </div>
+
+        <div class="card">
+            <img src="{{  url_for('static', filename='image2/P3-Blue.webp')}}" alt="Product 3">
+            <h2>Shiftwalk Air Force 1</h2>
+            <p>Price: $32.50</p>
+            <form action="/transactions/Product3" method="get">
+                <input type="submit" value="View Details">
+            </form>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+{% endblock %}

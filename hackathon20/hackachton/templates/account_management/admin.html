@@ -1,0 +1,40 @@
+{% extends "base.html"%}
+{% block title %}Library Loan System - Create User{% endblock %}
+{% block content %}
+<div class="container1" style="text-align:center">
+<div class="container text-center" xmlns="http://www.w3.org/1999/html">
+<h1>ADMINISTRATION</h1>
+<p>Staff Name:{{staff.staff['staff']}}</p>
+<p>Staff ID:{{staff.staff['STAFF_ID']}}</p>
+<hr>
+<div class="hstack gap-3">
+<div class="card" style="width: 25%">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <img src="{{ url_for('static', filename='usergroup.png') }}" height="300px" width="300px"
+    class="image"/>
+    <a href="/account_managementnt_management/retrieveMember" class="card-link">MEMBER RECORD</a>
+
+  </div>
+</div>
+<div class="card" style="width: 25%">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <img src="{{ url_for('static', filename='stock-inventory.jpg') }}" height="300px" width="300px"
+    class="image"/>
+    <a href="/transactions/Inventory" class="card-link">STOCK INVENTORY</a>
+  </div>
+</div>
+
+<div class="card" style="width:25%">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <img src="{{ url_for('static', filename='support.png') }}" height="300px" width="300px"
+    class="image"/>
+    <a href="/customer_support/retrieveCustomer" class="card-link">CUSTOMER SUPPORT</a>
+  </div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

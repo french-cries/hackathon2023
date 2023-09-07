@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.chat-container {
+    max-width: 270px;
+    padding: 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    bottom: 13%;
+    right: 2%;
+    float: right;
+    border-radius: 10px;
+    z-index: 99;
+}
+
+.chat-header {
+    text-align: center;
+    background-color: #FFE5B4;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+}
+
+.chat-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Reduce the message box size to half */
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 0;
+    height: 200px;
+}
+
+.chat-message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    max-width: 80%;
+}
+
+.bot-message {
+    background-color: #e0e0e0;
+}
+
+.user-input {
+    display: flex;
+}
+
+.user-input input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 0 5px;
+}
+
+.user-input button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 0 0 5px 0;
+    cursor: pointer;
+}
+.Me-message {
+        /* Set flex container properties */
+        background-color: #cdf3d4;
+        border-radius: 10px;
+        padding: 8px;
+        margin: 5px;
+        align-items: flex-end; /* Align items (chat messages) to the right */
+        float:right;
+        justify-content: flex-end;
+        align-self: flex-end;
+    }
+
+    .Chatbot-message {
+        /* Style for agent messages */
+        background-color: #cdf3d4;
+        border-radius: 10px;
+        padding: 8px;
+        margin: 5px;
+        align-self: flex-start; /* Align agent messages to the left */
+
+    }
+
+    img {
+  border-radius: 30%;
+}
+.btn1{
+background-color: rgb(255,255,255,0);
+border-width: 0;
+position: fixed;
+bottom:2%;
+right: 2%;
+}
+#test {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .fadeIn {
+        display: block;
+        opacity: 1;
+    }
+    .review-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+        }
+
+        .review-card {
+            width: 30%;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            word-wrap: break-word; /* Allow text to wrap to the next line */
+        }
+
+        .review-content {
+            margin-bottom: 10px;
+        }
+        .r-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .rating-container {
+            flex: 1;
+        }
+
+        .progress-container {
+            flex: 2;
+        }
+
+</style>
+{% from "includes/formHelper.html" import render_field %}
+<div class="btn1">
+    <button type="button" class="btn1" id="btn" >
+        <img src="{{  url_for('static', filename='image/chatbot.png')}}" alt="" width="60" height="60">
+    </button>
+</div>
+<div class="chat-container" id="test" style="display: none;">
+        <div class="chat-header">
+            <h3>Chatbot</h3>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="chat-message bot-message">Hi there! How can I assist you?</div>
+        </div>
+        <div class="user-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+<script>
+    let testDiv = document.getElementById("test");
+    let isOpen = false;
+
+    function fadeIn() {
+        testDiv.style.display = 'block';
+        let opacity = 0;
+
+        function animate() {
+            opacity += 0.05;
+            testDiv.style.opacity = opacity;
+            if (opacity < 1) {
+                window.requestAnimationFrame(animate);
+            }
+        }
+
+        animate();
+    }
+
+    function fadeOut() {
+        let opacity = 1;
+
+        function animate() {
+            opacity -= 0.03;
+            testDiv.style.opacity = opacity;
+            if (opacity > 0) {
+                window.requestAnimationFrame(animate);
+            } else {
+                testDiv.style.display = 'none';
+            }
+        }
+
+        animate();
+    }
+
+    function toggleTest() {
+        isOpen = !isOpen;
+        if (isOpen) {
+            fadeIn();
+        } else {
+            fadeOut();
+        }
+    }
+
+    document.getElementById('btn').addEventListener('click', toggleTest);
+</script>
+{% if get_flashed_messages(category_filter=["contact_success"]) %}
+<div class="alert alert-success">
+    {{ get_flashed_messages(category_filter=["contact_success"])[0] }}
+</div>
+{% endif %}
+
+{% if get_flashed_messages(category_filter=["review_success"]) %}
+<div class="alert alert-success">
+    {{ get_flashed_messages(category_filter=["review_success"])[0] }}
+</div>
+{% endif %}
+
+<div class="container1">
+     <h1 class="text-center " style="margin-top:50px">Reach Our Team</h1><br>
+<p class="lead text-center" style="margin-bottom: 30px;">text</p>
+<div class="container overflow-hidden text-center animated flash " style="border-color:black; display:table; ">
+  <div class="row gx-5" >
+    <div class="col-3 shadow p-3 mb-5 rounded" style="margin: 0 auto; padding:0; margin-right: 2%; display:table; background-color: rgba(255, 255, 255, 0.5); " >
+     <div class="p-3 " style=""><h4><b>Leave us a message</b></h4>
+       <p>Your thoughts and feedback matter a great deal to us. Please take a moment to leave us a message. Whether it's a suggestion, a question, or simply sharing your experience, we're all ears.</p>
+     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Message Me
+</button></div>
+    </div>
+      <br>
+    <div class="col-3 shadow p-3 mb-5 rounded" style="margin: 0 auto; padding:0; margin-left: 2%; display:table; background-color: rgba(255, 255, 255, 0.5);">
+      <div class="p-3" style=""><h4><b>FAQ</b></h4>
+        <p>Whether you're seeking information about our offerings, pricing, policies, or troubleshooting, we've got you covered. Save time and get the information you need without the hassle.</p>
+      <button type="button" class="btn btn-dark" id="myfaq">Ask Me</button></div>
+    </div>
+  </div>
+</div>
+    <script>
+        const button = document.getElementById('myfaq');
+        button.addEventListener('click', () => {
+            window.location.href = '/customer_support/faq';
+        });
+    </script>
+
+<h1 class="text-center" style="margin-top:100px">Talk to outlet</h1>
+<div class="container overflow-hidden text-center" style="border-color:black; padding: 0 110px;">
+  <div class="row gx-5">
+    <div class="col">
+     <div class="p-3" style="text-align:left; padding:100px;"><h4><b>Headquarters</b></h4>
+
+       <p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+        <style>svg{fill:#000000}</style><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
+    </svg>&nbsp &nbsp &nbsplocation</p>
+       <p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><style>svg{fill:#000000}</style><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/>
+       </svg>&nbsp &nbsp Email</p>
+       <p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><style>svg{fill:#000000}</style><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+       </svg>&nbsp &nbsp Contact</p>
+       <p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+        <style>svg{fill:#000000}</style><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
+    </svg>&nbsp &nbsp &nbsplocation</p>
+       <p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+       &nbsp &nbsp<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+       &nbsp &nbsp<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg></p>
+     </div>
+    </div>
+    <div class="col">
+      <div class="p-3" >
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22353.465306819922!2d103.84011689860529!3d1.3527640224509814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da17a6b747e185%3A0x774eecca2e0a1851!2sBata!5e0!3m2!1sen!2ssg!4v1689816136890!5m2!1sen!2ssg" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Contact Form</h1>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p class=".col-md-4">For any feedback, queries or concerns, please drop us a note below and we will get back to you soonest.</p>
+          <form method="POST" action="">
+              <div class="row g-3">
+                  <div class="col">
+                      <div class="form-floating mb-3">
+
+                          {{ render_field(form.first_name, class="form-control") }}
+
+                          <label>First Name</label>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="form-floating mb-3">
+    <!--                      <input type="text" class="form-control" id="floatingLname" placeholder="Last Name">-->
+                          {{ render_field(form.last_name, class="form-control") }}
+                          <label>Last Name</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="row g-3">
+                  <div class="col">
+                      <div class="form-floating mb-3">
+    <!--                      <input type="email" class="form-control" id="floatingEmail" placeholder="Email">-->
+                          {{ render_field(form.email, class="form-control") }}
+                          <label>Email</label>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="form-floating mb-3">
+    <!--                      <input type="text" class="form-control" id="floatingPhone" placeholder="Phone Number">-->
+                          {{ render_field(form.phone_number, class="form-control") }}
+                          <label>Phone Number</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="row g-3">
+                  <div class="col">
+                      <div class="form-floating mb-3">
+    <!--                      <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">-->
+    <!--                          <option selected>Open this select menu</option>-->
+    <!--                          <option value="1">One</option>-->
+    <!--                          <option value="2">Two</option>-->
+    <!--                          <option value="3">Three</option>-->
+    <!--                      </select>-->
+                          {{ render_field(form.subject, class="form-select") }}
+                          <label>Subject</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="row g-3">
+                  <div class="col">
+                      <div class="form-floating mb-3">
+    <!--                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>-->
+                          {{ render_field(form.questions, class="form-control") }}
+                          <label >Questions/Comments</label>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+          </form>
+    </div>
+  </div>
+</div>
+</div>
+<div style="margin:30px">
+    <div class="r-container">
+    <!-- Display the average rating using Bootstrap stars -->
+        <div class="rating-container">
+        <h2>Average Rating:
+        </h2>
+        <h1>{{ average_rating }}/5</h1>
+</div>
+<div class="progress-container">
+
+        <div class="d-flex align-items-center mb-2">
+            <span class="mr-2 rating-stars">
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+            </span>
+            <div class="progress flex-grow-1">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (ratings[5] / total_ratings) * 100 }}%"></div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center mb-2">
+            <span class="mr-2 rating-stars">
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+            </span>
+            <div class="progress flex-grow-1">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (ratings[4] / total_ratings) * 100 }}%"></div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center mb-2">
+            <span class="mr-2 rating-stars">
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+            </span>
+            <div class="progress flex-grow-1">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (ratings[3] / total_ratings) * 100 }}%"></div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center mb-2">
+            <span class="mr-2 rating-stars">
+                <i class="fas fa-star filled-star"></i>
+                <i class="fas fa-star filled-star"></i>
+            </span>
+            <div class="progress flex-grow-1">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (ratings[2] / total_ratings) * 100 }}%"></div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center mb-2">
+            <span class="mr-2 rating-stars">
+                <i class="fas fa-star filled-star"></i>
+            </span>
+            <div class="progress flex-grow-1">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (ratings[1] / total_ratings) * 100 }}%"></div>
+            </div>
+        </div>
+
+
+    {% if not ratings|sum > 0 %}
+        <p>No reviews found.</p>
+    {% endif %}
+</div>
+</div>
+
+
+
+
+    <h2>Submitted Reviews</h2>
+    <ul class="review-container ">
+        {% if reviews %}
+        {% for review in reviews %}
+            <li class=" shadow-sm p-3 mb-5 bg-body-tertiary rounded review-card" style="list-style-type: none">
+                <strong>{{ review.name }}</strong> - Rating: {{ review.rating }}/5 <br>
+                <strong>Comments:</strong>
+                <div class="review-content">
+                <p>{{ review.review }}</p>
+                </div>
+            </li>
+        {% endfor %}
+        {% else %}
+        <p>No reviews found.</p>
+    {% endif %}
+    </ul>
+<div class="container mt-4">
+
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+<script>
+        function appendMessage(message, sender, messageType) {
+            const chatBox = document.getElementById("chat-box");
+            const newMessage = document.createElement("div");
+            newMessage.className = `chat-message bot-message ${sender}-message`;
+            newMessage.innerText = `${sender}: ${message}`;
+
+            chatBox.appendChild(newMessage);
+            if (Array.isArray(message)) {
+        // If the message is an array (i.e., options), show them as buttons
+        const options = message[1];
+        options.forEach(option => {
+            appendOption(option);
+        });
+    }
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            if (userInput.trim() !== '') {
+                appendMessage(userInput, "Me");
+                document.getElementById("user-input").value = "";
+                fetch("/get_response", {
+                    method: "POST",
+                    body: new URLSearchParams({ user_input: userInput }),
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    appendMessage(data.response, "Chatbot");
+                })
+                .catch((error) => console.error("Error:", error));
+            }
+            var message = document.getElementById("user-input").value;
+            socket.emit('customer_message', message);
+        }
+
+
+        document.getElementById("user-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+
+    </script>
+
+
+
+{% endblock %}
+
+

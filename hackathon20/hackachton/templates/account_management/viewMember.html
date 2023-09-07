@@ -1,0 +1,76 @@
+{% extends "base.html"%}
+{% block title %}Library Loan System - View{% endblock %}
+{% block content %}
+<div class=" d-flex justify-content-center" style="margin-top:50px">
+<div class="border rounded" style="width:60%">
+
+<h1>Profile</h1>
+    {% for member in member_list %}
+    {% if member.get_user_id() == member_id %}
+<p>name: {{ member.get_first_name() }} {{  member.get_last_name()}}</p>
+<a>transaction history</a>
+    <hr>
+    <ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#Pesonal_Information">
+            Personal Information
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#Address">
+            Address
+        </a>
+    </li>
+
+</ul>
+
+    <div class="tab-content">
+    <div class="tab-pane container active" id="Pesonal_Information">
+
+        <br>
+        <h2>Personal information</h2>
+    <div class="container text-center">
+  <div class="row align-items-start">
+    <div class="col">
+      <p>phone number: {{ member.get_phone_number() }} </p>
+    <p>email {{ member.get_email() }}</p>
+    <p>Gender {{ member.get_gender() }}</p>
+    </div>
+    <div class="col">
+      <p>Date of Birth: {{ member.get_date_of_birth() }}</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+    </div>
+    <div class="tab-pane container fade" id="Address">
+        <br>
+        <h2>Adress</h2>
+        <br>
+          address
+        {{ member.address.get_postal_code() }}
+    </div>
+
+
+</div>
+
+<a href="/UpdateMemberProfile/{{ member.get_user_id() }}">
+    <button>Update</button>
+</a>
+    <form method="POST" action="/UpdateMemberProfile/{{ member.get_user_id() }}">
+    <button>Delete</button>
+</form>
+
+
+
+
+    {% endif %}
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

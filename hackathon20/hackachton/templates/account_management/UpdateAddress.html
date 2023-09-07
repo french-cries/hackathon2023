@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Update Address Profile{% endblock %}
+{% block content %}
+{% from "includes/formHelper.html" import render_field %}
+<div class="container1">
+<div class="container text-center" xmlns="http://www.w3.org/1999/html">
+
+<h1 class="display-4">Update Member Address</h1>
+
+<form method="POST" action="">
+    <div class="form-group">
+         {{ render_field(forms.country, class="form-control") }}
+    </div>
+
+    <div class="form-group">
+         {{ render_field(forms.address, class="form-control") }}
+    </div>
+    <div class="form-group">
+         {{ render_field(forms.house, class="form-control") }}
+    </div>
+    <div class="form-group">
+         {{ render_field(forms.postal_code, class="form-control") }}
+    </div>
+
+
+    <input type="submit" value="Submit" class="btn btn-primary bg-success">
+</form>
+</div></div>
+{% endblock %}

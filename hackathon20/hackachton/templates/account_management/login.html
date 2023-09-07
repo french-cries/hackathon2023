@@ -1,0 +1,99 @@
+{% extends "base.html"%}
+{% block title %}Library Loan System - Create User{% endblock %}
+{% block content %}
+{% from "includes/formhelper.html" import render_field %}
+
+<style>
+    :root {
+  --line-color: rgba(0, 0, 0, 0.5);
+}
+
+.vertical-line {
+  position: relative;
+  width: 1px; /* Set the width of the vertical line */
+  height: 600px; /* Set the height of the vertical line */
+  background-color: transparent; /* Set the background color of the line to transparent */
+}
+
+.vertical-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%; /* Position the line in the center */
+  transform: translateX(-50%); /* Adjust for half the width to keep it centered */
+  width: 5%;
+  height: 100%;
+  background-color: var(--line-color); /* Use the variable to set the color */
+  opacity: 0.5; /* Set the opacity level, where 0 is completely transparent and 1 is completely opaque */
+}
+</style>
+
+
+<div class="container1">
+<div class="container text-center" xmlns="http://www.w3.org/1999/html">
+  <div class="row">
+    <div class="col">
+      <h1>Login</h1>
+        <img src="{{ url_for('static', filename='user-circle.png') }}"
+    class="image"/>
+    <form method="post" action="">
+    <div class="form-group">
+        {{ render_field(login.email, class="form-control") }}
+    </div>
+    <div class="form-group">
+         {{ render_field(login.password, class="form-control") }}
+    </div>
+    <p></p>
+        <a href="/account_management/forgotpassword">forgot password?</a><br>
+<button type="submit" onclick="showIncorrectLoginMsg()">Login</button>
+        {% if get_flashed_messages(category_filter=["error"])[0] %}
+<div class="alert alert-danger">
+    {{ get_flashed_messages(category_filter=["error"])[0] }}
+</div>
+{% endif %}
+
+
+</form>
+        <script>
+
+</script>
+    </div >
+<div class="vertical-line"></div>
+    <div class="col" >
+
+      <h1> Benefit of Member</h1>
+
+        <div class="container overflow-hidden text-center">
+  <div class="row gy-5">
+    <div class="col-6">
+      <div class="p-3">
+          <img src="{{ url_for('static', filename='point.png') }}" height="60px">
+    <p>earn up to 250 to redeem $12.50</p>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-3">
+          <img src="{{ url_for('static', filename='anniversary.png') }}"  height="60px">
+    <p>Enjoy 10% Anniversary</p>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-3">
+          <img src="{{ url_for('static', filename='birthday.png') }}"  height="60px">
+    <p>enjoy birthday month discount(silver -15%, gold-20%,platinum-25%)</p>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-3">   <img src="{{ url_for('static', filename='lifetime.png') }}"  height="60px">
+    <p>Lifetime Membership</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <a href="/account_management/CreateMember"><button type="button" class="btn btn-success" >Sign Up Now</button></a>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "includes/formHelper.html" import render_field %}
+<style>
+
+
+.container {
+    display: flex;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgb(255,255,255,0.5);
+    border-radius: 20px;
+}
+
+.sidebar {
+    width: 200px;
+    padding-right: 20px;
+    border-right: 1px solid #ccc;
+}
+
+.sidebar h2 {
+    margin: 0;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar li a {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.sidebar li a:hover {
+    background-color: #f5f5f5;
+}
+
+.main-content {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item h3 {
+    margin: 0;
+    color: #333;
+}
+
+.faq-item p {
+    margin-top: 5px;
+    color: #666;
+}
+
+/* Style the search bar */
+form {
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 11px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+:root {
+  --line-color: rgba(0, 0, 0, 0.5);
+}
+
+.translucent-line {
+  position: relative;
+  width: 100%;
+  height: 2px; /* Change the height as needed */
+  background-color: transparent; /* Set the background color of the line to transparent */
+}
+
+.translucent-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--line-color); /* Use the variable to set the color */
+  opacity: 0.5; /* Set the opacity level, where 0 is completely transparent and 1 is completely opaque */
+}
+</style>
+
+<div class="container">
+
+        <div class="sidebar">
+            <h2>Categories</h2>
+            <ul>
+                <li><a href="{{ url_for('faq_page') }}">All</a></li>
+                {% for category in categories %}
+                <li><a href="{{ url_for('faq_category', category=category) }}"  {% if selected_category == category %} class="active" {% endif %}>{{ category }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Frequently Asked Questions</h1>
+            <form action="{{ url_for('search') }}" method="GET">
+                <input type="text" name="query" placeholder="Search for a question">
+                <input type="submit" value="Search">
+            </form>
+
+            {% if search_results %}
+            <br><h2>Search Results:</h2>
+            {% for category, results in search_results.items() %}
+                <br><h3>{{ category }}</h3>
+                {% for question, answer in results.items() %}
+                <div class="faq-item">
+                    <h4>{{ question }}</h4>
+                    <p>{{ answer | safe}}</p>
+                </div><br>
+                {% endfor %}<div class="translucent-line"></div>
+            {% endfor %}
+            {% elif selected_category %}
+            <h2>{{ selected_category }}</h2>
+            {% for question, answer in faq_items.items() %}
+            <div class="faq-item">
+                <h3>{{ question }}</h3>
+                <p>{{ answer | safe}}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            {% for category, faqs in faq_items.items() %}
+                <br><h2>{{ category }}</h2><br>
+                {% for question, answer in faqs.items() %}
+                <div class="faq-item">
+                    <h3>{{ question }}</h3>
+                    <p>{{ answer | safe}}</p>
+                </div><br>
+                {% endfor %}<div class="translucent-line"></div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+
+
+{% endblock %}

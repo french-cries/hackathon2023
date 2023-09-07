@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - payment{% endblock %}
+{% block content %}
+{% from "includes/formhelper.html" import render_field %}
+<h1 class="display-4">Address</h1>
+<form method="POST" action="">
+ <div class="form-group">
+ {{ render_field(form.country,class="form-check", style="liststyle-type:none") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.company, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.house, class="form-control") }}
+ </div>
+ <div class="form-group">
+ {{ render_field(form.postal_code, class="form-control") }}
+ </div>
+{{ render_field(form.submit, class="form-control") }}
+</form>
+{% endblock %}

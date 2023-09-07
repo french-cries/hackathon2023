@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Home{% endblock %}
+
+{% block content %}
+<style>
+.chat-container {
+    max-width: 270px;
+    padding: 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    bottom: 13%;
+    right: 2%;
+    float: right;
+    border-radius: 10px;
+    z-index: 99;
+}
+
+.chat-header {
+    text-align: center;
+    background-color: #FFE5B4;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+}
+
+.chat-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Reduce the message box size to half */
+    max-height: 500px;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 0;
+    height: 400px;
+}
+
+.chat-message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    max-width: 80%;
+}
+
+.bot-message {
+    background-color: #e0e0e0;
+}
+
+.user-input {
+    display: flex;
+}
+
+.user-input input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 0 5px;
+}
+
+.user-input button {
+    padding: 10px 15px;
+    background-color: #172e1e;
+    color: #fff;
+    border: none;
+    border-radius: 0 0 5px 0;
+    cursor: pointer;
+}
+.Me-message {
+        /* Set flex container properties */
+        background-color: #cdf3d4;
+        border-radius: 10px;
+        padding: 8px;
+        margin: 5px;
+        align-items: flex-end; /* Align items (chat messages) to the right */
+        float:right;
+        justify-content: flex-end;
+        align-self: flex-end;
+    }
+
+    .Chatbot-message {
+        /* Style for agent messages */
+        background-color: #cdf3d4;
+        border-radius: 10px;
+        padding: 8px;
+        margin: 5px;
+        align-self: flex-start; /* Align agent messages to the left */
+
+    }
+
+    img {
+  border-radius: 30%;
+}
+.btn1{
+background-color: rgb(255,255,255,0);
+border-width: 10px;
+border-color: #172e1e;
+position: fixed;
+bottom:2%;
+right: 2%;
+background-color: #172e1e;
+border-radius: 25px;
+}
+#test {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .fadeIn {
+        display: block;
+        opacity: 1;
+    }
+
+    .container3{
+    background-color: rgb(255,255,255,0.7);
+    padding: 20px 40px;
+    margin: 20px 5%;
+    border-radius: 20px;
+    }
+</style>
+<div class="btn1">
+    <button type="button" class="btn1" id="btn" >
+        <img src="{{  url_for('static', filename='image/chatbot.png')}}" alt="" width="100" height="100">
+    </button>
+</div>
+<div class="chat-container" id="test" style="display: none;">
+        <div class="chat-header">
+            <h3>NutriFit Chatbot</h3>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="chat-message bot-message">Hi there! How can I assist you?</div>
+        </div>
+        <div class="user-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+<script>
+    let testDiv = document.getElementById("test");
+    let isOpen = false;
+
+    function fadeIn() {
+        testDiv.style.display = 'block';
+        let opacity = 0;
+
+        function animate() {
+            opacity += 0.05;
+            testDiv.style.opacity = opacity;
+            if (opacity < 1) {
+                window.requestAnimationFrame(animate);
+            }
+        }
+
+        animate();
+    }
+
+    function fadeOut() {
+        let opacity = 1;
+
+        function animate() {
+            opacity -= 0.03;
+            testDiv.style.opacity = opacity;
+            if (opacity > 0) {
+                window.requestAnimationFrame(animate);
+            } else {
+                testDiv.style.display = 'none';
+            }
+        }
+
+        animate();
+    }
+
+    function toggleTest() {
+        isOpen = !isOpen;
+        if (isOpen) {
+            fadeIn();
+        } else {
+            fadeOut();
+        }
+    }
+
+    document.getElementById('btn').addEventListener('click', toggleTest);
+</script>
+<script>
+        function appendMessage(message, sender, messageType) {
+            const chatBox = document.getElementById("chat-box");
+            const newMessage = document.createElement("div");
+            newMessage.className = `chat-message bot-message ${sender}-message`;
+            newMessage.innerText = `${sender}: ${message}`;
+
+            chatBox.appendChild(newMessage);
+            if (Array.isArray(message)) {
+        // If the message is an array (i.e., options), show them as buttons
+        const options = message[1];
+        options.forEach(option => {
+            appendOption(option);
+        });
+    }
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            if (userInput.trim() !== '') {
+                appendMessage(userInput, "Me");
+                document.getElementById("user-input").value = "";
+                fetch("/get_response", {
+                    method: "POST",
+                    body: new URLSearchParams({ user_input: userInput }),
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    appendMessage(data.response, "Chatbot");
+                })
+                .catch((error) => console.error("Error:", error));
+            }
+            var message = document.getElementById("user-input").value;
+            socket.emit('customer_message', message);
+        }
+
+
+        document.getElementById("user-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+
+
+
+    </script>
+<div class="container3">
+<header style="position: relative;
+  height: 500px;width:100%; padding:0px">
+<!--<svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="-300 0 950 270"  style="  position: absolute;-->
+<!--  bottom: 0;-->
+<!--  width: auto;-->
+<!--  height: auto;">-->
+<!--    <path d="M-314,267 C105,364 400,100 812,279" fill="none" stroke="white" stroke-width="120" stroke-linecap="round"/>-->
+<!--  </svg>-->
+
+<div style="">
+
+    <div class="column" style="float: left; width: 50%;">
+        <img src="{{  url_for('static', filename='image/logo.png')}}" alt="Image" width="40%" style="position: absolute; top: 50%; transform: translate(0, -48%)">
+<br>
+
+
+</div>
+    <div class="column" style="float: right;
+  width: 50%; top: 50%; transform: translate(0%, 50%);">
+        {% if member  %}
+        <h1>Welcome {{ member.get_first_name() }} {{  member.get_last_name()}}</h1>
+        {% endif %}
+        <h1><strong>Welcome to NutriFit!</strong></h1><br>
+        <h5>Are you ready to embark on a journey towards a healthier, fitter you? Look no further! NutriFit is your all-in-one destination for nutrition, fitness, and well-being. Whether you're a seasoned health enthusiast or just starting on your wellness path, NutriFit has you covered.</h5>
+        {% if member  %}
+
+        {% else %}
+        <form  action="/account_management/CreateMember" method="GET" ><button class="btn btn-success" >Get Started</button></form>
+
+        {% endif %}
+
+    </div>
+    </div>
+    </header>
+
+</div>
+
+
+
+
+{% endblock %}

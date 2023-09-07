@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Staff Login{% endblock %}
+{% block content %}
+{% from "includes/formhelper.html" import render_field %}
+
+    <div class="border" style="width:50%;margin-top:30px">
+        <div class="text-center">
+        <h2>Administration</h2>
+            <form action="" method="POST">
+            <div class="form-group">
+                {{ render_field(stafflogin.Admin) }}
+            </div>
+            <br>
+            <div class="form-group">
+                {{ render_field(stafflogin.password) }}
+            </div>
+            <br>
+            {{ stafflogin.btn }}
+
+            </form>
+    </div>
+</div>
+{% endblock %}

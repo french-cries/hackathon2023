@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block content %}
+\<style>
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+img{
+    width: 100%;
+    display: block;
+}
+.main-wrapper{
+    min-height: 100vh;
+    background-color: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container{
+    max-width: 1200px;
+    padding: 0 1rem;
+    margin: 0 auto;
+}
+.product-div{
+    margin: 1rem 0;
+    padding: 2rem 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    background-color: #fff;
+    border-radius: 3px;
+    column-gap: 10px;
+}
+.product-div-left{
+    padding: 20px;
+}
+.product-div-right{
+    padding: 20px;
+}
+.img-container img{
+    width: 500px;
+    margin: 0 auto;
+}
+.hover-container{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 32px;
+}
+.hover-container div{
+    border: 2px solid rgba(252, 160, 175, 0.7);
+    padding: 1rem;
+    border-radius: 3px;
+    margin: 0 4px 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.active{
+    border-color: rgb(255, 145, 163)!important;
+}
+.hover-container div:hover{
+    border-color: rgb(255, 145, 163);
+}
+.hover-container div img{
+    width: 50px;
+    cursor: pointer;
+}
+.product-div-right span{
+    display: block;
+}
+.product-name{
+    font-size: 26px;
+    margin-bottom: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+.product-price{
+    font-weight: 700;
+    font-size: 24px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+.product-rating{
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+}
+.product-rating span{
+    margin-right: 6px;
+}
+.product-description{
+    font-weight: 18px;
+    line-height: 1.6;
+    font-weight: 300;
+    opacity: 0.9;
+    margin-top: 22px;
+}
+.btn-groups{
+    margin-top: 22px;
+}
+.btn-groups button{
+    display: inline-block;
+    font-size: 16px;
+    font-family: inherit;
+    text-transform: uppercase;
+    padding: 15px 16px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-groups button .fas{
+    margin-right: 8px;
+}
+.add-cart-btn{
+    background-color: #FF9F00;
+    border: 2px solid #FF9F00;
+    margin-right: 8px;
+}
+.add-cart-btn:hover{
+    background-color: #fff;
+    color: #FF9F00;
+}
+.buy-now-btn{
+    background-color: #000;
+    border: 2px solid #000;
+}
+.buy-now-btn:hover{
+    background-color: #fff;
+    color: #000;
+}
+
+
+
+
+
+
+.sidebar-cart {
+    width: 300px;
+    background-color: #f4f4f4;
+    position: fixed;
+    right: -300px;
+    top: 0;
+    height: 100%;
+    padding: 20px;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-icon {
+    font-size: 24px;
+    cursor: pointer;
+
+   }
+
+.product-color {
+margin-top: 20px;
+margin-bottom: 10px;
+}
+
+.product-size{
+margin-top: 10px;
+margin-bottom: 20px;
+}
+
+
+</style>
+
+    <div class="sidebar-cart" id="sidebar-cart">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <span class="close-icon" id="close-icon">&times;</span>
+        </div>
+    <ul>
+        {% for product_name, item in cart_items.items() %}
+            <li>
+                <strong>Product Name:</strong> {{ item.name }} <br>
+<!--                <strong>Color:</strong> {{ item["color"] }} <br>-->
+                <strong>Quantity:</strong> {{ item.quantity }} <br>
+                <strong>Price:</strong> ${{ '%.2f' % item.price }} <br>
+                <strong>Subtotal:</strong> ${{ '%.2f' % item.subtotal }} <br>
+            </li>
+
+
+            <hr>
+
+        {% endfor %}
+    </ul>
+        <div class="total">
+            <p>Total Price: ${{ '%.2f' % total_amount }}</p>
+        </div>
+    <div class="cart-actions">
+        <a class="close-cart-btn" id="close-cart-btn" href="/transactions/cart">Close Cart &amp; Continue Shopping</a>
+    </div>
+
+</div>
+
+ <div class = "main-wrapper">
+        <div class = "container">
+            <div class = "product-div">
+                <div class = "product-div-left">
+                    <div class = "img-container">
+                        <img src = "{{  url_for('static', filename='image2/P1-White.webp')}}" alt = "watch">
+                    </div>
+<!--                    <form method="POST" enctype="multipart/form-data" action="/upload">-->
+<!--                    <div class = "hover-container">-->
+<!--                        <div><img src = "static/image2/P1-Blue.Webp"></div>-->
+<!--                        <div><img src = "static/image2/P1-Green.Webp"></div>-->
+<!--                        <div><img src = "static/image2/P1-red.Webp"></div>-->
+<!--                        <div><img src = "static/image2/P1-White.Webp"></div>-->
+
+<!--                    </div>-->
+<!--                    </form>-->
+                </div>
+                <div class = "product-div-right">
+                    <form action="/transactions/form" method="POST" >
+                        <span class = "product-name" >{{ product1.name }}</span>
+                        <span class = "product-price">${{ '%.2f' % product1.price }}</span>
+                    <div class = "product-rating">
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star-half-alt"></i></span>
+                        <span>(350 ratings)</span>
+                    </div>
+
+                    <p class = "product-description">Designed for serious runners, these shoes combine cutting-edge technology with sleek aesthetics. The lightweight yet durable construction offers exceptional comfort and support, while the advanced cushioning system absorbs impact, ensuring a smooth and responsive stride. Whether you're tackling your daily miles or aiming for a new personal best, these shoes will help you conquer the track with style and confidence.</p>
+
+                    <span class = "product-color" >Colour available: {{ product1.colors }}</span>
+
+                    <span class = "product-size">Size available: {{ product1.sizes }}</span>
+
+                    <label>Quantity:</label>
+                    <input type="number" name="product_quantity" value="1" min="1">
+                    <input type="hidden" name="product_name" value="{{ product1.name }}">
+
+                    <div class = "btn-groups">
+                        <button type = "submit" class = "add-cart-btn"  ><i class = "fas fa-wallet"></i>add to cart</button>
+
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

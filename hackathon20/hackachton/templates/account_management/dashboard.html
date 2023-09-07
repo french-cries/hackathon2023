@@ -1,0 +1,76 @@
+{% extends "base.html"%}
+{% block title %}Library Loan System - Dashboard{% endblock %}
+{% block content %}
+{% from "includes/formhelper.html" import render_field %}
+
+
+
+
+<div class="container1">
+    <h1>Welcome, {{ member.get_first_name() }} {{  member.get_last_name()}}!</h1>
+    <h1>Here is your To-Do List</h1>
+<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
+  Create Task
+</button>
+
+
+<div class="container text-center" xmlns="http://www.w3.org/1999/html">
+<div class=" d-flex justify-content-center" style="margin-top:50px">
+<div style="width:60%">
+
+
+
+<div class="container">
+  <div class="row g-2">
+{% for task in tasks %}
+<div class="col">
+    <div class="card" style="width: 250px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <div class="card-body" style="background-color: #dce2de;">
+            <h5 class="card-title">{{ task.name }}</h5>
+            <p class="card-text">Category: {{ task.category }}</p>
+            <p class="card-text">Description: {{ task.description }}</p>
+            <form action="/account_management/deletetask/{{ member.get_user_id() }}/{{ loop.index }}/" method="POST">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Task</h1>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="background-color: #dce2de;">
+          <p class=".col-md-4">Create your health-related task here!</p>
+          <form method="POST" action="">
+              {{ render_field(form.name, class="form-control") }}
+              {{ render_field(form.category, class="form-control") }}
+
+              {{ render_field(form.note, class="form-control") }}
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+
+
+          </form>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

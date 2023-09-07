@@ -1,0 +1,107 @@
+
+ <style>
+     .cart-icon img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+    * {
+    font-family: "Roboto", sans-serif;
+    }
+
+ </style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style=" padding:0;">
+  <div class="container-fluid" style="background-color: #dce2de; padding:15px; ">
+      <a class="navbar-brand"  href="/">
+          <img src="{{  url_for('static', filename='image/logo-bg.jpeg')}}" alt="Image" height="50px" >
+      </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if staff %}
+
+          {% else %}
+
+
+          {% if member %}
+          <li class="nav-item">
+        </li>
+
+          <li class="nav-item dropdown">
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/customer_support/ContactUs_m/{{ member.get_user_id() }}">CONTACT US</a></li>
+            <li><a class="dropdown-item" href="/customer_support/review_m/{{ member.get_user_id() }}">REVIEW</a></li>
+<!--            <li><hr class="dropdown-divider"></li>-->
+            <li><a class="dropdown-item" href="/customer_support/faq_m/{{ member.get_user_id() }}">FAQ</a></li>
+          </ul>
+          </li>
+          <a class="nav-link" style="color: #000; opacity: 0.7;" href="/account_management/dashboard/{{ member.get_user_id() }}">TO-DO LIST</a>
+          <a class="nav-link" style="color: #000; opacity: 0.7;" href="/get_food/{{ member.get_user_id() }}">NUTRITION TRACKER</a>
+          {% else %}
+          <li class="nav-item">
+          <a class="nav-link dropdown-toggle" style="color: #000; opacity: 0.7;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            SUPPORT
+        </a>
+        </li>
+
+
+
+          {% endif %}
+          {% endif %}
+
+
+
+
+
+
+      </ul>
+
+
+        {% if staff %}
+       <a href="/account_management/StaffLogin"><button class="btn btn-outline-danger"  type="submit">
+            LOGOUT
+        </button>
+        </a>
+        {% else %}
+        <div class="cart-icon" id="cart-icon">
+            <img src="{{  url_for('static', filename='image2/cart-icon.jpg')}}" alt="Cart" width="50px">
+          </div>
+        {% if member %}
+        <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    My Account
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/account_management/profile/{{member.get_user_id()}}">Profile</a></li>
+    <li><a class="dropdown-item" href="/account_management/logout">Logout</a></li>
+
+  </ul>
+</div>
+
+
+
+
+
+            {% else %}
+        <button class="btn" type="submit"><a class="nav-link" style="color: #000; opacity: 0.7; " href="/account_management/login">LOG IN</a></button>
+
+          <button class="btn " type="submit">
+              <a class="nav-link" style="color: #000; opacity: 0.7; " href="/account_management/StaffLogin">STAFF</a>
+          </button>
+
+
+
+        {% endif %}
+        {% endif %}
+
+
+
+
+
+    </div>
+  </div>
+</nav>

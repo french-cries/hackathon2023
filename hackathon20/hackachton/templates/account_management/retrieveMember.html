@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Users{% endblock %}
+{% block content %}
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Retrieve Member</li>
+  </ol>
+</nav>
+<div class="container1">
+<h1 class="text-center" style="margin-top:50px">Retrieve Member</h1>
+
+<div>
+ {% if count == 0 %}
+ <p>There are no users.</p>
+ {% elif count == 1 %}
+ <p>There is 1 user.</p>
+ {% else %}
+ <p>There are {{ count }} users.</p>
+ {% endif %}
+</div>
+
+
+ <table class="table table-striped">
+ <thead>
+ <tr>
+ <th>User ID</th>
+ <th>First Name</th>
+  <td>Phone Number</td>
+ <th>Date</th>
+ <th>Gender</th>
+  <td>Points</td>
+
+ <th></th>
+ <th></th>
+ </tr>
+ </thead>
+ <tbody>{% for member in member_list %}
+ <tr>
+ <td>{{ member.get_user_id() }}</td>
+ <td>{{ member.get_first_name() }} {{  member.get_last_name()}}</td>
+  <td>{{ member.get_phone_number()}}</td>
+ <td>{{ member.get_date_of_birth() }}</td>
+ <td>{{ member.get_gender() }}</td>
+  <td>{{ member.get_point() }}</td>
+<td><a href="/account_management/viewmemberforstaff/{{member.get_user_id()}}" class="btn btn-warning">View</a></td>
+ <td>
+   <form action="{{url_for('deleteuser',id=member.get_user_id())}}" method="POST">
+ <input type="submit" value="Delete" class="btn btn-danger">
+ </form>
+
+ </tr>
+ {% endfor %}
+
+ </tbody>
+ </table>
+</div>
+{% endblock %}

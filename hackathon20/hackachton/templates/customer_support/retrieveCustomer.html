@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Administrator - Customer request{% endblock %}
+
+{% block content %}
+<style>
+  .alert-container {
+    display: none;
+  }
+  .visible {
+    display: block;
+  }
+  .hidden {
+    display: none;
+  }
+</style>
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Retrieve Customer</li>
+  </ol>
+</nav>
+<div class="container1">
+<h1 class="text-center" style="margin-top:50px">Retrieve Customer</h1><br>
+
+<div>
+ {% if count == 0 %}
+ <p>There are no customer.</p>
+ {% elif count == 1 %}
+ <p>There is 1 customer.</p>
+ {% else %}
+ <p>There are {{ count }} customer.</p>
+ {% endif %}
+</div>
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Ticket ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Question</th>
+      <th scope="col">Phone Number</th>
+      <th scope="col">Email</th>
+      <th scope="col">Status</th>
+      <th scope="col">Confirm</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  <div id="alert-container" class="alert alert-danger {% if show_alert %}visible{% else %}hidden{% endif %}">
+  Customer must have 'Completed' status to be deleted.
+</div>
+    {% for customer in customers_list %}
+
+ <tr>
+    <td>{{ customer.get_customer_id() }}</td>
+    <td>{{ customer.get_first_name() }} {{ customer.get_last_name() }}</td>
+    <td>{{ customer.get_subject() }}</td>
+    <td>{{ customer.get_questions() }}</td>
+    <td>{{ customer.get_phone_number() }}</td>
+     <td>{{ customer.get_email() }}</td>
+     <td>
+         <form action="{{ url_for('update_status', id=customer.get_customer_id()) }}" method="POST">
+          <select name="status" onchange="this.form.submit()">
+            <option value="pending" {% if customer.get_status() == "pending" %} selected {% endif %}>Pending</option>
+            <option value="completed" {% if customer.get_status() == "completed" %} selected {% endif %}>Completed</option>
+          </select>
+        </form>
+     </td>
+
+     <td>
+             <form action="{{url_for('delete_user', id=customer.get_customer_id())}}" method="POST" onsubmit="return confirmDelete();">
+         <input type="submit" value=Completed class="btn btn-danger">
+         </form>
+     </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+    <script>
+    {% for customer in customers_list %}
+  function confirmDelete() {
+    var confirmationMessage = 'Are you sure you have completed {{ customer.get_first_name() }} {{ customer.get_last_name() }} request?';
+    return confirm(confirmationMessage);
+    return isConfirmed;
+  }
+  {% endfor %}
+</script>
+
+</div>
+{% endblock %}
